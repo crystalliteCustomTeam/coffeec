@@ -1,25 +1,41 @@
+import 'package:cofffecup/Providers/Dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseService {
 
-  static signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  static signInWithGoogle(context) async {
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    try{
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-    // Once signed in, return the UserCredential
-    var result =  await FirebaseAuth.instance.signInWithCredential(credential);
-    print(result);
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      var result =  await FirebaseAuth.instance.signInWithCredential(credential);
+      var username = "USERNAME : ${result.additionalUserInfo?.profile?['given_name'] }";
+      Dialogs.customSnakBar(context, "${username}");
+
+    }
+    catch(e){
+      Dialogs.customSnakBar(context, "Something Went Wrong : ${e}");
+      print(e);
+    }
+
+  }
+
+
+  static signOutWithGoogle () async {
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
   }
 
 }

@@ -73,7 +73,8 @@ class SocialLoginView extends StatelessWidget {
                 ),
                 child: GestureDetector(
                   onTap: (){
-                    viewModel.loginWithGoogle();
+                    viewModel.loginWithGoogle(context);
+                    Navigator.pop(context);
                   },
                   child: Row(
                     children: [
