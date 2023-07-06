@@ -1,9 +1,13 @@
+import 'package:cofffecup/App/App.locator.dart';
+import 'package:cofffecup/App/App.router.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 
 
 Widget DrawerWidegts(context,logoutfunction){
+  final navigationService = locator<NavigationService>();
   return Container(
     padding: EdgeInsets.all(25),
     decoration: const BoxDecoration(
@@ -76,17 +80,22 @@ Widget DrawerWidegts(context,logoutfunction){
           ],
         ),
         const SizedBox(height: 15,),
-        Row(
-          children: [
-            const Image(image: AssetImage('assets/images/profilemenu.png')),
-            const SizedBox(width: 25,),
-            Text("Profile",style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-                color: const Color(0xffBDBDBD)
-            ),),
+        GestureDetector(
+          onTap: (){
+            navigationService.navigateToProfile();
+          },
+          child: Row(
+            children: [
+              const Image(image: AssetImage('assets/images/profilemenu.png')),
+              const SizedBox(width: 25,),
+              Text("Profile",style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: const Color(0xffBDBDBD)
+              ),),
 
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 35,),
         GestureDetector(

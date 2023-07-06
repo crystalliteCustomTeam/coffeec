@@ -7,13 +7,14 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:cofffecup/View/InfoView.dart' as _i3;
 import 'package:cofffecup/View/mainHome.dart' as _i5;
+import 'package:cofffecup/View/profileView.dart' as _i6;
 import 'package:cofffecup/View/SocialLoginView.dart' as _i4;
 import 'package:cofffecup/View/SplashView.dart' as _i2;
-import 'package:flutter/cupertino.dart' as _i7;
-import 'package:flutter/material.dart' as _i6;
+import 'package:flutter/cupertino.dart' as _i8;
+import 'package:flutter/material.dart' as _i7;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i8;
+import 'package:stacked_services/stacked_services.dart' as _i9;
 
 class Routes {
   static const splashView = '/';
@@ -24,11 +25,14 @@ class Routes {
 
   static const mainHomeMenu = '/main-home-menu';
 
+  static const profile = '/Profile';
+
   static const all = <String>{
     splashView,
     infoView,
     socialLoginView,
     mainHomeMenu,
+    profile,
   };
 }
 
@@ -50,32 +54,42 @@ class StackedRouter extends _i1.RouterBase {
       Routes.mainHomeMenu,
       page: _i5.MainHomeMenu,
     ),
+    _i1.RouteDef(
+      Routes.profile,
+      page: _i6.Profile,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.SplashView: (data) {
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SplashView(),
         settings: data,
       );
     },
     _i3.InfoView: (data) {
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.InfoView(),
         settings: data,
       );
     },
     _i4.SocialLoginView: (data) {
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.SocialLoginView(),
         settings: data,
       );
     },
     _i5.MainHomeMenu: (data) {
       final args = data.getArgs<MainHomeMenuArguments>(nullOk: false);
-      return _i6.MaterialPageRoute<dynamic>(
+      return _i7.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i5.MainHomeMenu(key: args.key, userData: args.userData),
+        settings: data,
+      );
+    },
+    _i6.Profile: (data) {
+      return _i7.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i6.Profile(),
         settings: data,
       );
     },
@@ -93,7 +107,7 @@ class MainHomeMenuArguments {
     required this.userData,
   });
 
-  final _i7.Key? key;
+  final _i8.Key? key;
 
   final dynamic userData;
 
@@ -114,7 +128,7 @@ class MainHomeMenuArguments {
   }
 }
 
-extension NavigatorStateExtension on _i8.NavigationService {
+extension NavigatorStateExtension on _i9.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -158,7 +172,7 @@ extension NavigatorStateExtension on _i8.NavigationService {
   }
 
   Future<dynamic> navigateToMainHomeMenu({
-    _i7.Key? key,
+    _i8.Key? key,
     required dynamic userData,
     int? routerId,
     bool preventDuplicates = true,
@@ -168,6 +182,20 @@ extension NavigatorStateExtension on _i8.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.mainHomeMenu,
         arguments: MainHomeMenuArguments(key: key, userData: userData),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToProfile([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.profile,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -217,7 +245,7 @@ extension NavigatorStateExtension on _i8.NavigationService {
   }
 
   Future<dynamic> replaceWithMainHomeMenu({
-    _i7.Key? key,
+    _i8.Key? key,
     required dynamic userData,
     int? routerId,
     bool preventDuplicates = true,
@@ -227,6 +255,20 @@ extension NavigatorStateExtension on _i8.NavigationService {
   }) async {
     return replaceWith<dynamic>(Routes.mainHomeMenu,
         arguments: MainHomeMenuArguments(key: key, userData: userData),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithProfile([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.profile,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
