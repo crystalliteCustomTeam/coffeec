@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-
 class Dialogs {
-  static void customSnakBar(BuildContext context , String Content){
+  static void customSnakBar(BuildContext context, String Content) {
     var errorMessage = Content;
     var snackBar = SnackBar(
       content: Text("${errorMessage}"),
@@ -10,7 +9,9 @@ class Dialogs {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  static void customProgress(BuildContext context){
-    showDialog(context: context, builder: (_)=> Center( child: CircularProgressIndicator()));
+  static void customProgress(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) => const Center(child: CircularProgressIndicator()));
   }
 }

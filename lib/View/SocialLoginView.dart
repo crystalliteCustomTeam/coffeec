@@ -64,18 +64,18 @@ class SocialLoginView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15,),
-              Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(50),
-                  border: Border.all(color: Color(0xff242424),width: 1)
-                ),
-                child: GestureDetector(
-                  onTap: (){
-                    viewModel.loginWithGoogle(context);
-                    Navigator.pop(context);
-                  },
+              GestureDetector(
+                onTap: (){
+                  viewModel.loginWithGoogle(context);
+
+                },
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                    border: Border.all(color: Color(0xff242424),width: 1)
+                  ),
                   child: Row(
                     children: [
                       const Image(image: AssetImage('assets/images/iconGoogle.png')),

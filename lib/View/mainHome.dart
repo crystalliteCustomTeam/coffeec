@@ -18,14 +18,7 @@ class MainHomeMenu extends StatelessWidget {
         builder: (context, viewModel, child) {
           return Scaffold(
             key: _scaffoldKey,
-            drawer: Drawer(
-              width: double.infinity,
-              backgroundColor: Colors.red,
-              child: Container(
-                color: Colors.white,
-                child: DrawerWidegts(context, viewModel.Logout),
-              ),
-            ),
+            drawer: DrawerMenu(context,viewModel),
             backgroundColor: Colors.white,
             body: Container(
               padding: const EdgeInsets.all(25),

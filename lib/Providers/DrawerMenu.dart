@@ -1,10 +1,23 @@
 import 'package:cofffecup/App/App.locator.dart';
 import 'package:cofffecup/App/App.router.dart';
+import 'package:cofffecup/Services/FirbaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 
+
+Widget DrawerMenu(context,viewModel){
+  return Drawer(
+    surfaceTintColor: Colors.red,
+    width: MediaQuery.of(context).size.width * 0.9,
+    backgroundColor: Colors.red,
+    child: Container(
+      color: Colors.white,
+      child: DrawerWidegts(context, viewModel.Logout),
+    ),
+  );
+}
 
 Widget DrawerWidegts(context,logoutfunction){
   final navigationService = locator<NavigationService>();
@@ -82,7 +95,27 @@ Widget DrawerWidegts(context,logoutfunction){
         const SizedBox(height: 15,),
         GestureDetector(
           onTap: (){
-            navigationService.navigateToProfile();
+
+            navigationService.navigateToChatView();
+          },
+          child: Row(
+            children: [
+              const Image(image: AssetImage('assets/images/profilemenu.png')),
+              const SizedBox(width: 25,),
+              Text("Friends",style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: const Color(0xffBDBDBD)
+              ),),
+
+            ],
+          ),
+        ),
+        const SizedBox(height: 15,),
+        GestureDetector(
+          onTap: (){
+            var userData = FirebaseService.Auth.currentUser;
+            navigationService.navigateToProfile(userData:userData);
           },
           child: Row(
             children: [

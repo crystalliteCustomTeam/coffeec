@@ -11,8 +11,11 @@ class SocialLoginVM extends BaseViewModel{
 
   loginWithGoogle(context) async {
     Dialogs.customProgress(context);
-    await FirebaseService.signInWithGoogle(context);
-    navigationService.navigateToMainHomeMenu(userData: FirebaseAuth.instance.currentUser);
+    var response = await FirebaseService.signInWithGoogle(context);
+    if(response != null){
+      navigationService.navigateToMainHomeMenu(userData: FirebaseAuth.instance.currentUser);
+    }
+
   }
 
 
