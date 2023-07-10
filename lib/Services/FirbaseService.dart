@@ -3,14 +3,49 @@ import 'dart:io';
 import 'package:cofffecup/Providers/Dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseService {
 
 
-  static final firestoreContacts = FirebaseFirestore.instance.collection('Contacts') ;
+  static final firestoreContacts = FirebaseFirestore.instance.collection('Contacts');
+
+  static final firestoreChatRoom = FirebaseFirestore.instance.collection('chatRoom');
+
+  static final firestoreMessageRoom = FirebaseFirestore.instance.collection('chatRoom');
+
+  static CreateChatRoom(var frID) async {
+    var roomID = frID+"_"+FirebaseAuth.instance.currentUser?.uid;
+    var findRoom = await firestoreChatRoom.doc(roomID).get();
+    if(findRoom.data() != null){
+        return "400";
+    }else{
+      return await firestoreChatRoom.doc(roomID).set({
+        'createdAt':DateTime.timestamp(),
+        'lastMessage':'',
+        'user_one':FirebaseAuth.instance.currentUser?.uid,
+        'user_two':frID
+      }).then((value) => true)
+          .catchError((error) => print("Failed to add user: $error"));
+    }
+
+
+
+  }
+
+
+  static addContact(String name,String number,String email,String relation,) async{
+
+    return firestoreContacts.add({
+      "Email": email,
+      "Name" : name,
+      "Number": number,
+      "Relation": relation,
+      "OwnerID" : FirebaseAuth.instance.currentUser?.uid
+    }).then((value) => true)
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   static signInWithGoogle(context) async {
 
@@ -49,6 +84,6 @@ class FirebaseService {
 
 
 
-    static FirebaseAuth Auth = FirebaseAuth.instance;
+  static FirebaseAuth Auth = FirebaseAuth.instance;
 
 }
