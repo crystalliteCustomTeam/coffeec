@@ -10,7 +10,7 @@ class chatViewVM extends BaseViewModel{
 
   fetchContactsFromFB() async {
     print(FirebaseService.firestoreContacts.get());
-     return FirebaseService.firestoreContacts.get();
+     return FirebaseService.firestoreContacts.where('OwnerID',isEqualTo: FirebaseService.Auth.currentUser?.uid).get();
   }
 
   addFriend(){
@@ -19,6 +19,6 @@ class chatViewVM extends BaseViewModel{
 
   createOrUpdateChatRoom(var friendID,var Name ){
       var result  = FirebaseService.CreateChatRoom(friendID);
-      navigationService.navigateToMessageView(userName: Name);
+      navigationService.navigateToMessageView(userName: Name,userID: friendID);
   }
 }

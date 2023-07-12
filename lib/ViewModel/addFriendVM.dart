@@ -12,7 +12,7 @@ class AddFriendVm extends BaseViewModel{
 
 
   addFriendToFirebase(context,String name,String email,String phone,String relation) async {
-    var result = await FirebaseService.addContact(name, phone, email, relation);
+    var result = await FirebaseService.addContact(name, phone, email, relation,context);
     if(result){
       navigationService.navigateToChatView();
     }else{

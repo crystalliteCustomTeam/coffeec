@@ -132,8 +132,8 @@ class StackedRouter extends _i1.RouterBase {
         orElse: () => const MessageViewArguments(),
       );
       return _i10.MaterialPageRoute<dynamic>(
-        builder: (context) =>
-            _i8.MessageView(key: args.key, userName: args.userName),
+        builder: (context) => _i8.MessageView(
+            key: args.key, userName: args.userName, userID: args.userID),
         settings: data,
       );
     },
@@ -231,26 +231,31 @@ class MessageViewArguments {
   const MessageViewArguments({
     this.key,
     this.userName,
+    this.userID,
   });
 
   final _i10.Key? key;
 
   final dynamic userName;
 
+  final dynamic userID;
+
   @override
   String toString() {
-    return '{"key": "$key", "userName": "$userName"}';
+    return '{"key": "$key", "userName": "$userName", "userID": "$userID"}';
   }
 
   @override
   bool operator ==(covariant MessageViewArguments other) {
     if (identical(this, other)) return true;
-    return other.key == key && other.userName == userName;
+    return other.key == key &&
+        other.userName == userName &&
+        other.userID == userID;
   }
 
   @override
   int get hashCode {
-    return key.hashCode ^ userName.hashCode;
+    return key.hashCode ^ userName.hashCode ^ userID.hashCode;
   }
 }
 
@@ -350,6 +355,7 @@ extension NavigatorStateExtension on _i11.NavigationService {
   Future<dynamic> navigateToMessageView({
     _i10.Key? key,
     dynamic userName,
+    dynamic userID,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -357,7 +363,8 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.messageView,
-        arguments: MessageViewArguments(key: key, userName: userName),
+        arguments:
+            MessageViewArguments(key: key, userName: userName, userID: userID),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -473,6 +480,7 @@ extension NavigatorStateExtension on _i11.NavigationService {
   Future<dynamic> replaceWithMessageView({
     _i10.Key? key,
     dynamic userName,
+    dynamic userID,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -480,7 +488,8 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition,
   }) async {
     return replaceWith<dynamic>(Routes.messageView,
-        arguments: MessageViewArguments(key: key, userName: userName),
+        arguments:
+            MessageViewArguments(key: key, userName: userName, userID: userID),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
