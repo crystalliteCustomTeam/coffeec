@@ -1,3 +1,4 @@
+import 'package:cofffecup/Providers/AppProviders.dart';
 import 'package:flutter/material.dart';
 
 class Dialogs {
@@ -21,11 +22,24 @@ class Dialogs {
     showDialog(
         context: context,
         builder: (_) => Scaffold(
-              body: Column(
-                children: [
-                  SizedBox(width:250,height:250,child: Image(image: AssetImage('assets/images/404.png'))),
-                  Text("$errorMessage"),
-                ],
+              body: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width:250,height:250,child: Image(image: AssetImage('assets/images/404.png'))),
+                    SizedBox(height: 15,),
+                    Text("$errorMessage"),
+                    SizedBox(height: 15,),
+                    ElevatedButton(onPressed: (){
+                      Navigator.pop(context);
+                    },style: ElevatedButton.styleFrom(
+                      backgroundColor: AppInformation.primaryColor
+                    ) ,child: Text("GO BACK"))
+                  ],
+                ),
               ),
             ));
   }

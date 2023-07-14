@@ -17,51 +17,63 @@ class FirebaseService {
   static final firestoreMessageRoom =
       FirebaseFirestore.instance.collection('chatRoom');
 
+  static final firestoreUserReg =
+      FirebaseFirestore.instance.collection('RegisterUser');
+  static FirebaseAuth Auth = FirebaseAuth.instance;
+
+  static RegisterUser(
+    String phone,
+      context
+  ) async {
+
+    try{
+      return await firestoreUserReg.add({
+        "Name": Auth.currentUser?.displayName,
+        "email": Auth.currentUser?.email,
+        "phone": "03162400202",
+        "registerAt": DateTime.timestamp(),
+        "status": "online"
+      }).then((value){
+        var response = 200;
+        return response;
+      });
+    }catch(e){
+      Dialogs.customSnakBar(context, "Something Went Wrong : ${e}");
+    }
+
+  }
+
   static CreateChatRoom(var frID) async {
     var roomID = frID + "_" + FirebaseAuth.instance.currentUser?.uid;
     var findRoom = await firestoreChatRoom.doc(roomID).get();
     if (findRoom.data() != null) {
       return "400";
     } else {
-      return await firestoreChatRoom
-          .doc(roomID)
-          .set({
-            'createdAt': DateTime.timestamp(),
-            'lastMessage': '',
-            'user_one': FirebaseAuth.instance.currentUser?.uid,
-            'user_two': frID
-          })
-          .catchError((error) => print("Failed to add user: $error"));
+      return await firestoreChatRoom.doc(roomID).set({
+        'createdAt': DateTime.timestamp(),
+        'lastMessage': '',
+        'user_one': FirebaseAuth.instance.currentUser?.uid,
+        'user_two': frID
+      }).catchError((error) => print("Failed to add user: $error"));
     }
   }
 
   static CreateMessage(var message, var frID) async {
     var roomID = frID + "_" + FirebaseAuth.instance.currentUser?.uid;
-    return await firestoreMessageRoom
-        .doc(roomID)
-        .collection('messages')
-        .add({
-          'message': message,
-          'user_id': FirebaseAuth.instance.currentUser?.uid,
-          'timestamP': DateTime.timestamp()
-        })
-        .catchError((error) => print(error));
+    return await firestoreMessageRoom.doc(roomID).collection('messages').add({
+      'message': message,
+      'user_id': FirebaseAuth.instance.currentUser?.uid,
+      'timestamP': DateTime.timestamp()
+    }).catchError((error) => print(error));
   }
 
-  static addContact(
-    String name,
-    String number,
-    String email,
-    String relation,
-      context
-  ) async {
-
-
-    var _isValid = await firestoreContacts.where('Number',isEqualTo: number).get();
-    if(_isValid.size == 0){
-
-      Dialogs.customDiaglog( context, "Contact Don't Have Coffee Cup");
-    }else{
+  static addContact(String name, String number, String email, String relation,
+      context) async {
+    var _isValid =
+        await firestoreContacts.where('Number', isEqualTo: number).get();
+    if (_isValid.size == 0) {
+      Dialogs.customDiaglog(context, "Contact Don't Have Coffee Cup");
+    } else {
       return firestoreContacts
           .add({
             "Email": email,
@@ -73,8 +85,6 @@ class FirebaseService {
           .then((value) => true)
           .catchError((error) => print("Failed to add user: $error"));
     }
-
-
   }
 
   static signInWithGoogle(context) async {
@@ -108,5 +118,5 @@ class FirebaseService {
     await FirebaseAuth.instance.signOut();
   }
 
-  static FirebaseAuth Auth = FirebaseAuth.instance;
+
 }
