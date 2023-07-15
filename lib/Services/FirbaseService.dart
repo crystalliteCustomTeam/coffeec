@@ -43,6 +43,10 @@ class FirebaseService {
 
   }
 
+  static SearchContact(var phone) async {
+    return await firestoreUserReg.where('phone', isEqualTo: phone).get().then((snapshot) => (print(snapshot.docs))).catchError((error)=>(print(error)));
+  }
+
   static CreateChatRoom(var frID) async {
     var roomID = frID + "_" + FirebaseAuth.instance.currentUser?.uid;
     var findRoom = await firestoreChatRoom.doc(roomID).get();

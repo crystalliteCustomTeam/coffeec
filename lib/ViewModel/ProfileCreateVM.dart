@@ -7,13 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class InforationCreateVM extends BaseViewModel{
+class InforationCreateVM extends BaseViewModel {
   final navigationService = locator<NavigationService>();
-     completeProfile(String phone,context) async {
-        var result = await FirebaseService.RegisterUser(phone,context);
-        if(result == 200){
-          print("Working");
-          navigationService.navigateToMainHomeMenu(userData: FirebaseAuth.instance.currentUser);
-        }
-     }
+  completeProfile(String phone, context) async {
+    var result = await FirebaseService.RegisterUser(phone, context);
+    if (result == 200) {
+      print("Working");
+      navigationService.navigateToMainHomeMenu(
+          userData: FirebaseAuth.instance.currentUser);
+    }
+  }
 }

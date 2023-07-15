@@ -8,6 +8,19 @@ import 'package:stacked_services/stacked_services.dart';
 class chatViewVM extends BaseViewModel{
   final navigationService = locator<NavigationService>();
 
+   int initalScreen = 0;
+
+
+   searchContact(phone){
+     var result =  FirebaseService.SearchContact(phone);
+     print(result);
+   }
+
+   changeScreen(int ScreenValue){
+     initalScreen = ScreenValue;
+     rebuildUi();
+   }
+
   fetchContactsFromFB() async {
     print(FirebaseService.firestoreContacts.get());
      return FirebaseService.firestoreContacts.where('OwnerID',isEqualTo: FirebaseService.Auth.currentUser?.uid).get();

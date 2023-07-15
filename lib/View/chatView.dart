@@ -6,12 +6,59 @@ import 'package:stacked/stacked.dart';
 
 class ChatView extends StatelessWidget {
   ChatView({Key? key}) : super(key: key);
-
+  TextEditingController _searchController  = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => chatViewVM(),
         builder: (context, viewModel, child) {
+          int _selectedIndex = viewModel.initalScreen;
+          List<Widget> _widgetOptions = <Widget>[
+             SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.69,
+                          height: 60,
+                          child: TextField(
+                            controller: _searchController,
+                            keyboardType: TextInputType.phone,
+                            decoration: const InputDecoration(
+                              hintText: "Search Contact",
+                              border: OutlineInputBorder()
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            viewModel.searchContact(_searchController.text);
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: AppInformation.primaryColor,
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: const Icon(Icons.search,color: Colors.white,size: 35,),
+                          ),
+                        )
+                      ],
+                    )
+
+                ],
+              ),
+            ),
+            FetchContacts(viewModel, context),
+          ];
+
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               backgroundColor: AppInformation.primaryColor,
@@ -19,6 +66,23 @@ class ChatView extends StatelessWidget {
                 viewModel.addFriend();
               },
               child: Icon(Icons.add),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search_sharp),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_2_outlined),
+                  label: 'Contacts',
+                )
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: AppInformation.primaryColor,
+              onTap: (value) {
+                viewModel.changeScreen(value);
+              },
             ),
             appBar: AppBar(
               backgroundColor: AppInformation.primaryColor,
@@ -35,7 +99,8 @@ class ChatView extends StatelessWidget {
                 width: double.infinity,
                 height: double.infinity,
                 padding: EdgeInsets.all(15),
-                child: FetchContacts(viewModel, context)),
+                child: _widgetOptions.elementAt(_selectedIndex),
+            ),
           );
         });
   }
@@ -53,11 +118,10 @@ Widget FetchContacts(viewModel, context) {
               onTap: () {
                 var friendID = snapshot.data.docs[index].id;
                 var Name = snapshot.data.docs[index]['Name'];
-                viewModel.createOrUpdateChatRoom(friendID,Name);
-
+                viewModel.createOrUpdateChatRoom(friendID, Name);
               },
               child: Container(
-                margin: EdgeInsets.only(top: 3,bottom: 3),
+                  margin: EdgeInsets.only(top: 3, bottom: 3),
                   width: double.infinity,
                   height: 90,
                   padding: EdgeInsets.only(left: 15, right: 15),
