@@ -11,14 +11,21 @@ class chatViewVM extends BaseViewModel{
    int initalScreen = 0;
 
 
-   searchContact(phone){
-     var result =  FirebaseService.SearchContact(phone);
+   searchContact(phone) async {
+     var result =  await FirebaseService.SearchContact(phone);
      print(result);
    }
 
    changeScreen(int ScreenValue){
-     initalScreen = ScreenValue;
-     rebuildUi();
+     if(ScreenValue == 2){
+       navigationService.navigateToMessageList();
+
+     }
+     else{
+       initalScreen = ScreenValue;
+       rebuildUi();
+     }
+
    }
 
   fetchContactsFromFB() async {

@@ -7,6 +7,7 @@ import 'package:cofffecup/View/SplashView.dart';
 import 'package:cofffecup/View/addFriend.dart';
 import 'package:cofffecup/View/chatView.dart';
 import 'package:cofffecup/View/mainHome.dart';
+import 'package:cofffecup/View/messageList.dart';
 import 'package:cofffecup/View/profileView.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -20,7 +21,8 @@ import 'package:stacked_services/stacked_services.dart';
   MaterialRoute(page: ChatView),
   MaterialRoute(page: MessageView),
   MaterialRoute(page: AddFriend),
-  MaterialRoute(page: InforationCreateView)
+  MaterialRoute(page: InforationCreateView),
+  MaterialRoute(page: MessageList)
 
 ],dependencies: [
   Singleton(

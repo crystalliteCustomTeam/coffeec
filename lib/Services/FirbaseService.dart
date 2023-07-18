@@ -44,7 +44,12 @@ class FirebaseService {
   }
 
   static SearchContact(var phone) async {
-    return await firestoreUserReg.where('phone', isEqualTo: phone).get().then((snapshot) => (print(snapshot.docs))).catchError((error)=>(print(error)));
+    return  await firestoreUserReg.where('phone', isEqualTo: phone).get().then((QuerySnapshot querySnapshot){
+      querySnapshot.docs.forEach((doc) {
+        print(doc["Name"]);
+      });
+    });
+
   }
 
   static CreateChatRoom(var frID) async {
@@ -61,6 +66,8 @@ class FirebaseService {
       }).catchError((error) => print("Failed to add user: $error"));
     }
   }
+
+
 
   static CreateMessage(var message, var frID) async {
     var roomID = frID + "_" + FirebaseAuth.instance.currentUser?.uid;

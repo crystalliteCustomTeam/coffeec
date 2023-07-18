@@ -76,7 +76,12 @@ class ChatView extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person_2_outlined),
                   label: 'Contacts',
-                )
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_bubble_outline_sharp),
+                  label: 'Chats',
+
+                ),
               ],
               currentIndex: _selectedIndex,
               selectedItemColor: AppInformation.primaryColor,
