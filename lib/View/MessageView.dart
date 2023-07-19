@@ -5,18 +5,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class MessageView extends StatelessWidget {
-  MessageView({Key? key, this.userName, this.userID}) : super(key: key);
+  MessageView({Key? key, this.userName, this.userID, this.screen})
+      : super(key: key);
   var userID;
   var userName;
+  var screen;
 
   @override
   Widget build(BuildContext context) {
     TextEditingController messages = TextEditingController();
     ScrollController _scrollController = ScrollController();
-
+    var _streamBuilder;
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => MessageViewVM(),
         builder: (context, viewModel, child) {
+          _streamBuilder = viewModel.getMessages(userID);
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
@@ -35,7 +38,7 @@ class MessageView extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.8,
                         padding: const EdgeInsets.all(15),
                         child: StreamBuilder(
-                          stream: viewModel.getMessages(userID),
+                          stream: _streamBuilder,
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.hasError) {
@@ -101,9 +104,10 @@ class MessageView extends StatelessWidget {
                             onTap: () {
                               viewModel.createMessage(messages.text, userID);
                               messages.clear();
-                              Future.delayed(Duration(seconds: 1),(){
+                              Future.delayed(Duration(seconds: 1), () {
                                 _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent + 100,
+                                  _scrollController.position.maxScrollExtent +
+                                      100,
                                   curve: Curves.easeOut,
                                   duration: const Duration(milliseconds: 300),
                                 );

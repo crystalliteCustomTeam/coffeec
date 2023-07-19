@@ -4,13 +4,11 @@ import 'package:stacked/stacked.dart';
 
 class MessageViewVM extends BaseViewModel {
   getMessages(var userID) {
-    var create_id = "${userID}_${FirebaseService.Auth.currentUser?.uid}";
-    print(create_id);
-    return FirebaseService.firestoreMessageRoom
-        .doc(create_id)
-        .collection('messages')
-        .orderBy('timestamP',descending: false)
-        .snapshots();
+      return FirebaseService.firestoreMessageRoom
+          .doc(userID)
+          .collection('messages')
+          .orderBy('timestamP',descending: false)
+          .snapshots();
   }
 
   getUserID(){

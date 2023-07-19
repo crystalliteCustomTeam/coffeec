@@ -11,8 +11,8 @@ class AddFriendVm extends BaseViewModel{
   var RelationStatus = "Please Choose Relation";
 
 
-  addFriendToFirebase(context,String name,String email,String phone,String relation) async {
-    var result = await FirebaseService.addContact(name, phone, email, relation,context);
+  addFriendToFirebase(context,String name,String phone,String relation) async {
+    var result = await FirebaseService.addContact(name, phone, relation,context);
     if(result){
       navigationService.navigateToChatView();
     }else{

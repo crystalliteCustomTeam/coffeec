@@ -1,3 +1,5 @@
+import 'package:cofffecup/Providers/AppProviders.dart';
+import 'package:cofffecup/Services/FirbaseService.dart';
 import 'package:cofffecup/ViewModel/messageListVM.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -14,6 +16,7 @@ class MessageList extends StatelessWidget {
             appBar: AppBar(
               title: Text("Messages"),
               centerTitle: true,
+              backgroundColor: AppInformation.primaryColor,
             ),
             body: Container(
               width: double.infinity,
@@ -24,7 +27,6 @@ class MessageList extends StatelessWidget {
                   child: StreamBuilder(
                     stream: viewModel.messages(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-
                       if (snapshot.hasError) {
                         return const Text('Something went wrong');
                       }
@@ -34,21 +36,35 @@ class MessageList extends StatelessWidget {
                       }
 
                       if (snapshot.hasData) {
-                        print(snapshot.data);
+
                         return ListView(
                           children: snapshot.data!.docs.map<Widget>((document) {
                             Map data = document.data()! as Map;
-                            if(document.id ){
-                              return ListTile(
-                                  title: Text(
-                                    "${data['user_two']}",
-                                    softWrap: true,
-                                    maxLines: 100,
-                                  ));
-                            }else{
-                              return Text("s");
-                            }
+                            String contactID = document.id;
 
+                            var userId = viewModel.UserId;
+                            if (contactID.contains(userId.toString())) {
+                              var frName = data['friend_name'];
+                              var frId = document.id;
+                              return GestureDetector(
+                                onTap: (){
+                                    viewModel.getMessages(frName,frId);
+                                },
+                                child: ListTile(
+                                    title: Text(
+                                  "${data['friend_name']}".toUpperCase(),
+                                  softWrap: true,
+                                  maxLines: 100,
+                                      style: TextStyle(fontSize: 18),
+                                ),
+                                subtitle: Text("${data['lastMessage']}"),
+                                ),
+
+
+                              );
+                            } else {
+                              return SizedBox();
+                            }
                           }).toList(),
                         );
                       } else {

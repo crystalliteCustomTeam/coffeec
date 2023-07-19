@@ -10,7 +10,6 @@ class AddFriend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController Name = TextEditingController();
-    TextEditingController Email = TextEditingController();
     TextEditingController Phone = TextEditingController();
     return ViewModelBuilder.reactive(viewModelBuilder: ()=>AddFriendVm(), builder: (context, viewModel,child){
       var relation = viewModel.RelationStatus;
@@ -43,15 +42,6 @@ class AddFriend extends StatelessWidget {
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 15,),
-              TextField(
-                controller: Email,
-                decoration: const InputDecoration(
-                  labelText: "Enter Email",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 15),
               DropdownButton<String>(
                 items: <String>['Friend', 'Work', 'Cafe Friend'].map((String value) {
                   return DropdownMenuItem<String>(
@@ -68,7 +58,7 @@ class AddFriend extends StatelessWidget {
               ),
               const SizedBox(height: 15,),
               ElevatedButton(onPressed: (){
-                viewModel.addFriendToFirebase(context,Name.text,Email.text,Phone.text,relation);
+                viewModel.addFriendToFirebase(context,Name.text,Phone.text,relation);
               },style: ElevatedButton.styleFrom(
                 backgroundColor: AppInformation.primaryColor
               ), child: Text("Add Friend",style: GoogleFonts.poppins(

@@ -21,73 +21,88 @@ class FirebaseService {
       FirebaseFirestore.instance.collection('RegisterUser');
   static FirebaseAuth Auth = FirebaseAuth.instance;
 
-  static RegisterUser(
-    String phone,
-      context
-  ) async {
-
-    try{
-      return await firestoreUserReg.add({
+  static RegisterUser(String phone, context) async {
+    try {
+      return await firestoreUserReg.doc(Auth.currentUser?.uid).set({
         "Name": Auth.currentUser?.displayName,
         "email": Auth.currentUser?.email,
-        "phone": "03162400202",
+        "phone": phone,
         "registerAt": DateTime.timestamp(),
         "status": "online"
-      }).then((value){
+      }).then((value) {
         var response = 200;
         return response;
       });
-    }catch(e){
+    } catch (e) {
       Dialogs.customSnakBar(context, "Something Went Wrong : ${e}");
     }
-
   }
 
   static SearchContact(var phone) async {
-    return  await firestoreUserReg.where('phone', isEqualTo: phone).get().then((QuerySnapshot querySnapshot){
+    return await firestoreUserReg
+        .where('phone', isEqualTo: phone)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         print(doc["Name"]);
       });
     });
-
   }
 
-  static CreateChatRoom(var frID) async {
+  static CreateChatRoom(var frID, var Name) async {
     var roomID = frID + "_" + FirebaseAuth.instance.currentUser?.uid;
     var findRoom = await firestoreChatRoom.doc(roomID).get();
     if (findRoom.data() != null) {
-      return "400";
+      return findRoom.id;
     } else {
-      return await firestoreChatRoom.doc(roomID).set({
+       await firestoreChatRoom.doc(roomID).set({
         'createdAt': DateTime.timestamp(),
         'lastMessage': '',
-        'user_one': FirebaseAuth.instance.currentUser?.uid,
-        'user_two': frID
+        'sender': FirebaseAuth.instance.currentUser?.uid,
+        'receiver': frID,
+        'friend_name': Name.toString()
       }).catchError((error) => print("Failed to add user: $error"));
+      return roomID;
     }
   }
 
+  static CreateMessage(var message, var userID) async {
 
-
-  static CreateMessage(var message, var frID) async {
-    var roomID = frID + "_" + FirebaseAuth.instance.currentUser?.uid;
-    return await firestoreMessageRoom.doc(roomID).collection('messages').add({
-      'message': message,
-      'user_id': FirebaseAuth.instance.currentUser?.uid,
-      'timestamP': DateTime.timestamp()
+    await firestoreMessageRoom.doc(userID).update({
+      'lastMessage': message,
+      'createdAt': DateTime.timestamp()
     }).catchError((error) => print(error));
+
+      return await firestoreMessageRoom.doc(userID).collection('messages').add({
+        'message': message,
+        'user_id': FirebaseAuth.instance.currentUser?.uid,
+        'timestamP': DateTime.timestamp()
+      }).catchError((error) => print(error));
+
+
+
   }
 
-  static addContact(String name, String number, String email, String relation,
-      context) async {
+  static addContact(
+      String name, String number, String relation, context) async {
     var _isValid =
-        await firestoreContacts.where('Number', isEqualTo: number).get();
+        await firestoreUserReg.where('phone', isEqualTo: number).get();
     if (_isValid.size == 0) {
       Dialogs.customDiaglog(context, "Contact Don't Have Coffee Cup");
     } else {
-      return firestoreContacts
-          .add({
-            "Email": email,
+      var friendAuthiD;
+      await firestoreUserReg
+          .where('phone', isEqualTo: number)
+          .get()
+          .then((QuerySnapshot querySnapsho) {
+        querySnapsho.docs.forEach((doc) {
+          friendAuthiD = doc.id;
+        });
+      });
+
+      return await firestoreContacts
+          .doc(await friendAuthiD)
+          .set({
             "Name": name,
             "Number": number,
             "Relation": relation,
@@ -128,6 +143,4 @@ class FirebaseService {
     await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
   }
-
-
 }

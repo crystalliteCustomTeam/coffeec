@@ -17,7 +17,7 @@ class chatViewVM extends BaseViewModel{
    }
 
    changeScreen(int ScreenValue){
-     if(ScreenValue == 2){
+     if(ScreenValue == 1){
        navigationService.navigateToMessageList();
 
      }
@@ -37,8 +37,8 @@ class chatViewVM extends BaseViewModel{
       navigationService.navigateToAddFriend();
   }
 
-  createOrUpdateChatRoom(var friendID,var Name ){
-      var result  = FirebaseService.CreateChatRoom(friendID);
-      navigationService.navigateToMessageView(userName: Name,userID: friendID);
+  createOrUpdateChatRoom(var friendID,var Name ) async {
+      var result = await FirebaseService.CreateChatRoom(friendID,Name);
+      navigationService.navigateToMessageView(userName: Name,userID: result,screen: 0);
   }
 }

@@ -14,49 +14,7 @@ class ChatView extends StatelessWidget {
         builder: (context, viewModel, child) {
           int _selectedIndex = viewModel.initalScreen;
           List<Widget> _widgetOptions = <Widget>[
-             SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.69,
-                          height: 60,
-                          child: TextField(
-                            controller: _searchController,
-                            keyboardType: TextInputType.phone,
-                            decoration: const InputDecoration(
-                              hintText: "Search Contact",
-                              border: OutlineInputBorder()
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: (){
-                            viewModel.searchContact(_searchController.text);
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: AppInformation.primaryColor,
-                              borderRadius: BorderRadius.circular(5)
-                            ),
-                            child: const Icon(Icons.search,color: Colors.white,size: 35,),
-                          ),
-                        )
-                      ],
-                    )
-
-                ],
-              ),
-            ),
-            FetchContacts(viewModel, context),
+             FetchContacts(viewModel, context),
           ];
 
           return Scaffold(
@@ -69,10 +27,6 @@ class ChatView extends StatelessWidget {
             ),
             bottomNavigationBar: BottomNavigationBar(
               items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search_sharp),
-                  label: 'Search',
-                ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person_2_outlined),
                   label: 'Contacts',
@@ -141,25 +95,9 @@ Widget FetchContacts(viewModel, context) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${snapshot.data.docs[index]['Name']}",
+                            "${snapshot.data.docs[index]['Name']}".toUpperCase(),
                             style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w700, fontSize: 18),
-                          ),
-                          Text(
-                            "${snapshot.data.docs[index]['Number']}",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: AppInformation.primaryColor),
-                          ),
-                          Text(
-                            maxLines: 1,
-                            softWrap: true,
-                            "${snapshot.data.docs[index]['Email']}",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: AppInformation.primaryColor),
                           ),
                         ],
                       ),
